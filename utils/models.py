@@ -1,6 +1,6 @@
 import numpy as np
 import json
-import utils
+from utils import utils
 import sys
 
 import torch

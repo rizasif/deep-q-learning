@@ -2,7 +2,7 @@ import torch
 from torch import nn
 
 import copy
-from utils import to_variable, make_dir
+from utils.utils import to_variable, make_dir
 
 
 class DeepQNetwork(nn.Module):

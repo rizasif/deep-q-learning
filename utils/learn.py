@@ -1,5 +1,5 @@
 import numpy as np
-from utils import to_variable
+from utils.utils import to_variable
 
 
 def e_greedy_action(Q, phi, env, step):

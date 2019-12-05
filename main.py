@@ -46,9 +46,9 @@ params = {
     'memory_size': int(4.5e2),  # N
     'history_size': 4,  # k
     'train_freq': 4,
-    'target_update_freq': 10000,  # C: Target nerwork update frequency
+    'target_update_freq': 10,  # C: Target nerwork update frequency
     'num_actions': env.action_space.n,
-    'min_steps_train': 50000
+    'min_steps_train': 50
 }
 # Initialize Logger
 # log = Logger(log_dir="/log")

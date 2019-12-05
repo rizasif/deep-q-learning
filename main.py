@@ -40,7 +40,7 @@ step = 0
 has_trained_model = False
 # Init training params
 params = {
-    'num_episodes': 300,
+    'num_episodes': 5000,
     'minibatch_size': 32,
     'max_episode_length': int(10e6),  # T
     'memory_size': int(4.5e2),  # N

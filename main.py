@@ -1,5 +1,7 @@
 import gym
 from torch import optim
+import torch
+import matplotlib.pyplot as plt
 
 from utils.learn import e_greedy_action
 # from utils.logger import Logger
@@ -14,6 +16,23 @@ import wimblepong
 env = gym.make("WimblepongVisualSimpleAI-v0")
 env.unwrapped.scale = 1
 env.unwrapped.fps = 30
+
+def plot_rewards(rewards):
+    plt.figure(1)
+    plt.clf()
+    rewards_t = torch.tensor(rewards, dtype=torch.float)
+    plt.title('Training...')
+    plt.xlabel('Episode')
+    plt.ylabel('Cumulative reward')
+    plt.grid(True)
+    plt.plot(rewards_t.numpy())
+    # Take 100 episode averages and plot them too
+    if len(rewards_t) >= 100:
+        means = rewards_t.unfold(0, 100, 1).mean(1).view(-1)
+        means = torch.cat((torch.zeros(99), means))
+        plt.plot(means.numpy())
+
+    plt.pause(0.001)  # pause a bit so that plots are updated
 
 # Current iteration
 step = 0
@@ -49,9 +68,11 @@ optimizer = optim.RMSprop(
 # Initialize sequence s1 = {x1} and preprocessed sequence phi = phi(s1)
 H = History.initial(env)
 win = 0
+cul_rewards = []
 
 for ep in range(params['num_episodes']):
     print("Episode: {}, Wins: {}".format(ep, win))
+    rewards = []
 
     phi = phi_map(H.get())
     # del phi
@@ -73,6 +94,7 @@ for ep in range(params['num_episodes']):
         image, reward, done, _ = env.step(action)
 
         actual_reward = reward
+        rewards = actual_reward
 
         # Clip reward to range [-1, 1]
         reward = max(-1.0, min(reward, 1.0))
@@ -117,9 +139,10 @@ for ep in range(params['num_episodes']):
         # # Restart game if done
         if done:
             H = History.initial(env)
+            cul_rewards.append(rewards)
             if actual_reward == 10:
                 win += 1
             # log.reset_episode()
             break
 
-writer.close()
+plot_rewards(cul_rewards)
